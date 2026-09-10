@@ -1,6 +1,6 @@
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef7ff;color:#15324a}
 .hero{background:linear-gradient(135deg,#dff4ff,#78c5ff,#2e6fb5);padding:28px 20px 52px;color:white;text-align:center}
-.hero-inner{max-width:920px;margin:auto}.project-logo{display:block;width:min(250px,62vw);height:auto;margin:0 auto 18px;border-radius:50%;box-shadow:0 10px 30px rgba(0,0,0,.2);background:white}
+.hero-inner{max-width:920px;margin:auto}.project-logo{display:block;width:min(95px,22vw);height:auto;margin:0 auto 16px;border-radius:50%;box-shadow:0 10px 30px rgba(0,0,0,.2);background:white}
 .badge{display:inline-block;background:rgba(255,255,255,.2);padding:8px 14px;border-radius:999px;margin-bottom:14px}
 h1{font-size:clamp(2rem,5vw,4rem);margin:0 0 14px}.hero p{font-size:1.1rem}
 button{cursor:pointer}.primary,.tabs button,.actions button,.brick-buttons button,.team-card,#moonNext,#safeNext,#saveTeam,#timerBtn{border:0;border-radius:12px;padding:12px 16px;font-weight:700}
@@ -16,4 +16,4 @@ main{max-width:1050px;margin:24px auto;padding:0 16px}.view{display:none}.view.a
 .feedback{font-weight:700;min-height:24px}.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.team-card{background:#e9f5ff}
 .team-editor{margin-top:20px;padding-top:16px;border-top:1px solid #d8e8f5}.hidden{display:none}.fact-row{display:grid;grid-template-columns:100px 1fr;gap:10px;align-items:center;margin:10px 0}.fact-row input{width:100%;padding:10px;border:1px solid #b9d4e8;border-radius:10px}
 .timer{font-size:4rem;font-weight:800;text-align:center;margin-top:18px;color:#1d65a6}.placeholder{padding:42px;border:2px dashed #9cc8e8;border-radius:16px;text-align:center}
-footer{text-align:center;padding:24px;color:#567}@media(max-width:600px){.hero{padding:24px 14px 38px}.project-logo{width:min(190px,64vw)}.card{padding:18px}.fact-row{grid-template-columns:1fr}}
+footer{text-align:center;padding:24px;color:#567}@media(max-width:600px){.hero{padding:24px 14px 38px}.project-logo{width:min(80px,22vw)}.card{padding:18px}.fact-row{grid-template-columns:1fr}}
