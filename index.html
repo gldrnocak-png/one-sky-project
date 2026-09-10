@@ -67,20 +67,53 @@
     </section>
 
     <section id="moon" class="view">
-      <div class="card">
-        <h2>🌙 Six Bricks Moon Code</h2>
-        <div id="moonInfo" class="moon-info"></div>
-        <p id="moonClue">Press “Start Moon Code” to begin.</p>
-        <div class="brick-buttons">
-          <button class="red" data-color="red">Red</button>
-          <button class="orange" data-color="orange">Orange</button>
-          <button class="yellow" data-color="yellow">Yellow</button>
-          <button class="green" data-color="green">Green</button>
-          <button class="blue" data-color="blue">Blue</button>
-          <button class="darkblue" data-color="darkblue">Dark Blue</button>
+      <div class="card moon-card">
+        <div class="moon-hero">
+          <div class="moon-orbit" aria-hidden="true">
+            <div class="moon-glow">🌙</div>
+            <div class="star s1">✦</div>
+            <div class="star s2">✧</div>
+            <div class="star s3">✦</div>
+          </div>
+          <div>
+            <p class="eyebrow">MARCH • MOON LEARNING</p>
+            <h2>Six Bricks Moon Code</h2>
+            <p>Read the clue, think scientifically and choose the correct Six Bricks colour.</p>
+          </div>
         </div>
-        <button id="moonNext">Start Moon Code</button>
-        <p id="moonFeedback" class="feedback"></p>
+
+        <div class="moon-round-track" aria-label="Moon Code rounds">
+          <div class="round-pill active" id="roundPill1"><span>1</span> Know the Moon</div>
+          <div class="round-line"></div>
+          <div class="round-pill" id="roundPill2"><span>2</span> Moon Phases</div>
+          <div class="round-line"></div>
+          <div class="round-pill" id="roundPill3"><span>3</span> Moon Master</div>
+        </div>
+
+        <div class="moon-progress-shell">
+          <div id="moonProgressBar" class="moon-progress-bar"></div>
+        </div>
+
+        <div id="moonInfo" class="moon-info"></div>
+
+        <div class="moon-question-panel">
+          <div class="moon-question-label">YOUR CLUE</div>
+          <p id="moonClue">Press “Start Moon Code” to begin.</p>
+        </div>
+
+        <p class="choose-label">Choose your brick colour:</p>
+        <div class="brick-buttons moon-brick-buttons">
+          <button class="red moon-brick-btn" data-color="red"><span class="brick-dot"></span>Red</button>
+          <button class="orange moon-brick-btn" data-color="orange"><span class="brick-dot"></span>Orange</button>
+          <button class="yellow moon-brick-btn" data-color="yellow"><span class="brick-dot"></span>Yellow</button>
+          <button class="green moon-brick-btn" data-color="green"><span class="brick-dot"></span>Green</button>
+          <button class="blue moon-brick-btn" data-color="blue"><span class="brick-dot"></span>Blue</button>
+          <button class="darkblue moon-brick-btn" data-color="darkblue"><span class="brick-dot"></span>Dark Blue</button>
+        </div>
+
+        <div id="moonFeedback" class="feedback moon-feedback"></div>
+
+        <button id="moonNext" class="primary moon-next">Start Moon Code 🚀</button>
       </div>
     </section>
 
@@ -164,6 +197,6 @@
   </main>
 
   <footer>One Sky, Play, Learn & Discover • eTwinning • Learning through play</footer>
-  <script src="app.js?v=8"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>
