@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+  // PWA SERVICE WORKER
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+    });
+  }
+
   const views = [...document.querySelectorAll('.view')];
   const tabs = [...document.querySelectorAll('.tabs button')];
   const byId = id => document.getElementById(id);
