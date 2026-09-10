@@ -1,9 +1,9 @@
-const CACHE_NAME = 'one-sky-v1';
+const CACHE_NAME = 'one-sky-v2';
 const CORE_ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './app.js?v=6',
+  './app.js?v=7',
   './project-logo.png',
   './icon-192.png',
   './icon-512.png',

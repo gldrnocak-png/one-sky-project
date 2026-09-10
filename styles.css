@@ -30,3 +30,51 @@ footer{text-align:center;padding:24px;color:#567}@media(max-width:600px){.hero{p
 @media(max-width:600px){
   .music-toggle{margin:10px 0 0 0}
 }
+
+.game-note{
+  background:#fff8cf;
+  border-radius:12px;
+  padding:12px 14px;
+  margin:12px 0 16px;
+}
+.game-progress{
+  font-weight:700;
+  color:#1d65a6;
+  margin-bottom:12px;
+}
+.question-box{
+  min-height:110px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:1.25rem;
+  font-weight:700;
+  background:#f5fbff;
+  border:2px solid #d8ebf8;
+  border-radius:16px;
+  padding:20px;
+}
+.sun-actions{
+  justify-content:center;
+}
+.sun-actions .choice{
+  min-width:140px;
+  font-size:1rem;
+}
+.sun-feedback{
+  text-align:center;
+  font-size:1.05rem;
+}
+.game-next{
+  display:block;
+  margin:10px auto;
+}
+.score-panel{
+  margin-top:18px;
+  text-align:center;
+  background:#eef7ff;
+  border-radius:12px;
+  padding:12px;
+  font-size:1.05rem;
+}

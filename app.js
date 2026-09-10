@@ -63,26 +63,145 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // SUN
-  const sunQ = [
+  const sunQuestions = [
     {q:'The Sun is a star.', a:true},
+    {q:'The Sun produces its own light and heat.', a:true},
     {q:'The Sun is smaller than Earth.', a:false},
-    {q:'The Sun rotates on its axis.', a:true},
-    {q:'The Sun is a solid sphere.', a:false},
-    {q:'The Sun provides light and heat to Earth.', a:true}
+    {q:'The Sun rotates on its own axis.', a:true},
+    {q:'The Sun is a solid rocky sphere.', a:false},
+    {q:'The Sun is much larger than Earth.', a:true},
+    {q:'The Sun is made mostly of hot gases.', a:true},
+    {q:'The Sun is a planet.', a:false},
+    {q:'The Sun is the main source of light and heat for Earth.', a:true},
+    {q:'The Sun does not move at all.', a:false},
+    {q:'The Sun is at the center of our Solar System.', a:true},
+    {q:'Earth is larger than the Sun.', a:false},
+    {q:'The Sun appears to move across the sky because Earth rotates.', a:true},
+    {q:'The Sun gives off energy.', a:true},
+    {q:'The Sun is the closest star to Earth.', a:true},
+    {q:'The Sun is the same size as the Moon.', a:false},
+    {q:'Looking directly at the Sun is safe for our eyes.', a:false},
+    {q:'The Sun has a spherical shape.', a:true},
+    {q:'The Sun is colder than Earth.', a:false},
+    {q:'Without the Sun, life on Earth would be very difficult.', a:true}
   ];
-  let curSun = null, sunScore = 0;
-  byId('sunNext').addEventListener('click', () => {
-    curSun = sunQ[Math.floor(Math.random()*sunQ.length)];
-    byId('sunQuestion').textContent = curSun.q;
-    byId('sunFeedback').textContent = '';
+
+  let sunIndex = -1;
+  let sunScore = 0;
+  let sunAnswered = false;
+  let sunStarted = false;
+
+  const sunQuestion = byId('sunQuestion');
+  const sunFeedback = byId('sunFeedback');
+  const sunNext = byId('sunNext');
+  const sunProgress = byId('sunProgress');
+  const sunScoreEl = byId('sunScore');
+  const sunTotalEl = byId('sunTotal');
+
+  if (sunTotalEl) sunTotalEl.textContent = sunQuestions.length;
+
+  function playTone(kind){
+    try{
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      if(kind === 'correct'){
+        osc.frequency.setValueAtTime(740, ctx.currentTime);
+        osc.frequency.setValueAtTime(980, ctx.currentTime + 0.09);
+      }else if(kind === 'wrong'){
+        osc.frequency.setValueAtTime(260, ctx.currentTime);
+        osc.frequency.setValueAtTime(190, ctx.currentTime + 0.12);
+      }else{
+        osc.frequency.setValueAtTime(520, ctx.currentTime);
+        osc.frequency.setValueAtTime(700, ctx.currentTime + 0.08);
+        osc.frequency.setValueAtTime(900, ctx.currentTime + 0.16);
+      }
+
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.28);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.3);
+    }catch(e){}
+  }
+
+  function showSunQuestion(){
+    sunAnswered = false;
+    sunFeedback.textContent = '';
+    sunQuestion.textContent = sunQuestions[sunIndex].q;
+    sunProgress.textContent = `Question ${sunIndex + 1} of ${sunQuestions.length}`;
+    sunNext.textContent = 'Next Question';
+    sunNext.disabled = true;
+    sunNext.style.opacity = '.55';
+  }
+
+  function finishSunGame(){
+    sunStarted = false;
+    sunAnswered = true;
+    sunProgress.textContent = 'Challenge Complete!';
+    let result = '';
+    if(sunScore >= 18) result = 'Sun Master 🌟';
+    else if(sunScore >= 15) result = 'Sun Explorer ☀️';
+    else if(sunScore >= 10) result = 'Sun Detective 🔎';
+    else result = 'Keep Exploring 🚀';
+
+    sunQuestion.innerHTML = `You scored <strong>${sunScore}/${sunQuestions.length}</strong><br>${result}`;
+    sunFeedback.textContent = 'Great job! You completed all 20 questions.';
+    sunNext.textContent = 'Play Again';
+    sunNext.disabled = false;
+    sunNext.style.opacity = '1';
+    playTone('finish');
+  }
+
+  sunNext.addEventListener('click', () => {
+    if(!sunStarted){
+      sunStarted = true;
+      sunIndex = 0;
+      sunScore = 0;
+      sunScoreEl.textContent = '0';
+      showSunQuestion();
+      return;
+    }
+
+    if(sunIndex < sunQuestions.length - 1){
+      sunIndex++;
+      showSunQuestion();
+    }else{
+      finishSunGame();
+    }
   });
-  document.querySelectorAll('[data-sun]').forEach(b => b.addEventListener('click', () => {
-    if(!curSun) return;
-    const ok = (b.dataset.sun === 'true') === curSun.a;
-    if(ok) sunScore++;
-    byId('sunScore').textContent = sunScore;
-    byId('sunFeedback').textContent = ok ? 'Correct! ⭐' : 'Try again.';
-  }));
+
+  document.querySelectorAll('[data-sun]').forEach(button => {
+    button.addEventListener('click', () => {
+      if(!sunStarted || sunAnswered) return;
+
+      const selected = button.dataset.sun === 'true';
+      const correct = sunQuestions[sunIndex].a;
+
+      if(selected === correct){
+        sunScore++;
+        sunScoreEl.textContent = sunScore;
+        sunFeedback.textContent = 'Correct! ⭐';
+        playTone('correct');
+      }else{
+        sunFeedback.textContent = `Not this time. The correct answer is ${correct ? 'TRUE' : 'FALSE'}.`;
+        playTone('wrong');
+      }
+
+      sunAnswered = true;
+      sunNext.disabled = false;
+      sunNext.style.opacity = '1';
+
+      if(sunIndex === sunQuestions.length - 1){
+        sunNext.textContent = 'See Result';
+      }
+    });
+  });
 
   // MOON CODE
   const moonRounds = [
