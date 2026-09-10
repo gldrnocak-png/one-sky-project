@@ -3,6 +3,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabs = [...document.querySelectorAll('.tabs button')];
   const byId = id => document.getElementById(id);
 
+  // BACKGROUND MUSIC
+  const bgMusic = byId('bgMusic');
+  const musicToggle = byId('musicToggle');
+  let musicWanted = true;
+
+  function updateMusicButton(){
+    if(!bgMusic || !musicToggle) return;
+    musicToggle.textContent = bgMusic.paused ? '🔇 Music Off' : '🔊 Music On';
+  }
+
+  async function startMusic(){
+    if(!bgMusic || !musicWanted) return;
+    try{
+      bgMusic.volume = 0.35;
+      await bgMusic.play();
+    }catch(e){
+      // Browsers may block playback until a user gesture.
+    }
+    updateMusicButton();
+  }
+
+  if(musicToggle){
+    musicToggle.addEventListener('click', async () => {
+      if(bgMusic.paused){
+        musicWanted = true;
+        await startMusic();
+      }else{
+        musicWanted = false;
+        bgMusic.pause();
+        updateMusicButton();
+      }
+    });
+  }
+
+  if(bgMusic){
+    bgMusic.addEventListener('play', updateMusicButton);
+    bgMusic.addEventListener('pause', updateMusicButton);
+  }
+
   function showView(id){
     views.forEach(v => v.classList.toggle('active', v.id === id));
     tabs.forEach(t => t.classList.toggle('active', t.dataset.view === id));
@@ -10,7 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   tabs.forEach(t => t.addEventListener('click', () => showView(t.dataset.view)));
-  byId('startBtn').addEventListener('click', () => showView('sun'));
+  byId('startBtn').addEventListener('click', async () => {
+    await startMusic();
+    showView('sun');
+  });
 
   // SUN
   const sunQ = [
