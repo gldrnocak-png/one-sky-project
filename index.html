@@ -17,7 +17,7 @@
     </div>
   </header>
 
-  <nav class="tabs">
+  <nav class="tabs" aria-label="Main navigation">
     <button data-view="home" class="active">Home</button>
     <button data-view="sun">Sun Games</button>
     <button data-view="moon">Moon Code</button>
@@ -32,16 +32,10 @@
       <div class="card">
         <h2>Welcome 🌍</h2>
         <p>This web app supports the “One Sky, Play, Learn & Discover” eTwinning project for students aged 10–13.</p>
-        <div class="brick-row">
+        <div class="brick-row" aria-label="Six Bricks colours">
           <span class="brick red"></span><span class="brick orange"></span><span class="brick yellow"></span>
           <span class="brick green"></span><span class="brick blue"></span><span class="brick darkblue"></span>
         </div>
-      </div>
-      <div class="grid">
-        <article class="card"><h3>☀️ Sun Games</h3><p>Review Sun facts through quick challenges.</p></article>
-        <article class="card"><h3>🌙 Moon Code</h3><p>Use colour codes to solve Moon questions.</p></article>
-        <article class="card"><h3>🛡️ Safe Internet</h3><p>Make safe digital choices using Six Bricks colours.</p></article>
-        <article class="card"><h3>🤝 Team Space</h3><p>Create shared knowledge with international teams.</p></article>
       </div>
     </section>
 
@@ -62,7 +56,8 @@
     <section id="moon" class="view">
       <div class="card">
         <h2>🌙 Six Bricks Moon Code</h2>
-        <p id="moonClue">Press “New Clue” to begin.</p>
+        <div id="moonInfo" class="moon-info"></div>
+        <p id="moonClue">Press “Start Moon Code” to begin.</p>
         <div class="brick-buttons">
           <button class="red" data-color="red">Red</button>
           <button class="orange" data-color="orange">Orange</button>
@@ -71,7 +66,7 @@
           <button class="blue" data-color="blue">Blue</button>
           <button class="darkblue" data-color="darkblue">Dark Blue</button>
         </div>
-        <button id="moonNext">New Clue</button>
+        <button id="moonNext">Start Moon Code</button>
         <p id="moonFeedback" class="feedback"></p>
       </div>
     </section>
@@ -138,6 +133,6 @@
   </main>
 
   <footer>One Sky, Play, Learn & Discover • eTwinning • Learning through play</footer>
-  <script src="app.js"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>
