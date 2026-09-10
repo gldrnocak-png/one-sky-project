@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One Sky, Play, Learn & Discover</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero"><div class="wrap"><p class="tag">eTwinning Project • Dec 2026 – 6 Jun 2027</p><h1>ONE SKY, PLAY, LEARN & DISCOVER</h1><p>Science, play, Six Bricks and international collaboration under one sky.</p><button onclick="show('sun')">Start Exploring</button></div></header>
+<nav>
+<button onclick="show('home')">Home</button><button onclick="show('sun')">Sun Games</button><button onclick="show('moon')">Moon Code</button><button onclick="show('safe')">Safe Internet</button><button onclick="show('team')">Team Space</button><button onclick="show('final')">6-6-6 Final</button>
+</nav>
+<main class="wrap">
+<section id="home" class="view active"><div class="card"><h2>Welcome 🌍</h2><p>This web app supports the “One Sky, Play, Learn & Discover” eTwinning project for students aged 10–13.</p><div class="bricks"><span class="red"></span><span class="orange"></span><span class="yellow"></span><span class="green"></span><span class="blue"></span><span class="darkblue"></span></div></div></section>
+<section id="sun" class="view"><div class="card"><h2>☀️ True or False Sun Challenge</h2><p id="sunQ">Press New Question.</p><div class="actions"><button onclick="answerSun(true)">True</button><button onclick="answerSun(false)">False</button><button onclick="newSun()">New Question</button></div><p id="sunF"></p><p>Score: <b id="sunScore">0</b></p></div></section>
+<section id="moon" class="view"><div class="card"><h2>🌙 Six Bricks Moon Code</h2><p id="moonQ">Press New Clue.</p><div class="actions colorBtns"><button class="red" onclick="answerMoon('red')">Red</button><button class="orange" onclick="answerMoon('orange')">Orange</button><button class="yellow" onclick="answerMoon('yellow')">Yellow</button><button class="green" onclick="answerMoon('green')">Green</button><button class="blue" onclick="answerMoon('blue')">Blue</button><button class="darkblue" onclick="answerMoon('darkblue')">Dark Blue</button></div><button onclick="newMoon()">New Clue</button><p id="moonF"></p></div></section>
+<section id="safe" class="view"><div class="card"><h2>🛡️ Safe Internet Challenge</h2><p><b>Red</b>=STOP • <b>Yellow</b>=THINK • <b>Green</b>=SAFE • <b>Blue</b>=PRIVACY • <b>Orange</b>=KIND • <b>Dark Blue</b>=ASK</p><p id="safeQ">Press New Scenario.</p><div class="actions colorBtns"><button class="red" onclick="answerSafe('red')">STOP</button><button class="yellow" onclick="answerSafe('yellow')">THINK</button><button class="green" onclick="answerSafe('green')">SAFE</button><button class="blue" onclick="answerSafe('blue')">PRIVACY</button><button class="orange" onclick="answerSafe('orange')">KIND</button><button class="darkblue" onclick="answerSafe('darkblue')">ASK</button></div><button onclick="newSafe()">New Scenario</button><p id="safeF"></p></div></section>
+<section id="team" class="view"><div class="card"><h2>🤝 Colour the Sky with Six Bricks</h2><p>Choose a team and write one scientific fact for each colour.</p><select id="teamSel"><option>Team Sun</option><option>Team Moon</option><option>Team Earth</option><option>Team Orbit</option></select><div id="facts"></div><button onclick="saveFacts()">Save on this device</button><p id="saveMsg"></p></div></section>
+<section id="final" class="view"><div class="card"><h2>🚀 6-6-6 International Challenge</h2><ol><li>Build the Sun.</li><li>Show rotation.</li><li>Show the Moon orbiting Earth.</li><li>Build a Full Moon.</li><li>Show Sun–Earth–Moon size order.</li><li>Build the future you dream of.</li></ol><button onclick="startTimer()">Start 60-second timer</button><div id="timer">60</div></div></section>
+</main>
+<footer>One Sky, Play, Learn & Discover • eTwinning</footer>
+<script src="app.js"></script>
+</body></html>
