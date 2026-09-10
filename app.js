@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   tabs.forEach(t => t.addEventListener('click', () => showView(t.dataset.view)));
   byId('startBtn').addEventListener('click', () => showView('sun'));
 
+  // SUN
   const sunQ = [
     {q:'The Sun is a star.', a:true},
     {q:'The Sun is smaller than Earth.', a:false},
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     byId('sunFeedback').textContent = ok ? 'Correct! ⭐' : 'Try again.';
   }));
 
+  // MOON CODE
   const moonRounds = [
     {
       title:'Round 1 – Getting to Know the Moon',
@@ -72,72 +74,135 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
-  let r=0, q=0, roundScore=0, totalPoints=0, started=false, answered=false;
-  const moonInfo = byId('moonInfo');
-  const moonClue = byId('moonClue');
-  const moonFeedback = byId('moonFeedback');
-  const moonNext = byId('moonNext');
+  let roundIndex = 0;
+  let questionIndex = 0;
+  let roundScore = 0;
+  let totalPoints = 0;
+  let started = false;
+  let answered = false;
+  let state = 'ready'; // ready, question, betweenRounds, finished
 
-  const colorLabel = {red:'Red',orange:'Orange',yellow:'Yellow',green:'Green',blue:'Blue',darkblue:'Dark Blue'};
+  const info = byId('moonInfo');
+  const clue = byId('moonClue');
+  const feedback = byId('moonFeedback');
+  const next = byId('moonNext');
 
-  function renderMoon(){
-    const round = moonRounds[r];
-    moonInfo.innerHTML = `<strong>${round.title}</strong><br>Question ${q+1} of 6 • Round score: ${roundScore}/6 • Total points: ${totalPoints}<div style="margin-top:10px">${round.legend.map(x=>`<span class="legend-item"><b>${x[0]}:</b> ${x[1]}</span>`).join('')}</div>`;
-    moonClue.textContent = round.questions[q].clue;
-    moonFeedback.textContent = '';
-    moonNext.textContent = 'Next Question';
+  const colorLabel = {
+    red:'Red', orange:'Orange', yellow:'Yellow',
+    green:'Green', blue:'Blue', darkblue:'Dark Blue'
+  };
+
+  function renderQuestion(){
+    state = 'question';
     answered = false;
+    const round = moonRounds[roundIndex];
+    info.innerHTML = `
+      <strong>${round.title}</strong><br>
+      Question ${questionIndex + 1} of 6 • Round score: ${roundScore}/6 • Total points: ${totalPoints}
+      <div style="margin-top:10px">
+        ${round.legend.map(x => `<span class="legend-item"><b>${x[0]}:</b> ${x[1]}</span>`).join('')}
+      </div>`;
+    clue.textContent = round.questions[questionIndex].clue;
+    feedback.textContent = '';
+    next.textContent = 'Next Question';
+    next.disabled = true;
+    next.style.opacity = '.55';
   }
 
-  function finishRound(){
-    if(roundScore === 6){
-      totalPoints++;
-      moonFeedback.innerHTML = 'Perfect round! ⭐ You earned 1 point.';
+  function endRound(){
+    if(roundScore === 6) totalPoints++;
+
+    if(roundIndex < moonRounds.length - 1){
+      state = 'betweenRounds';
+      const nextRound = roundIndex + 2;
+      feedback.innerHTML = (roundScore === 6
+        ? 'Perfect round! ⭐ You earned 1 point.'
+        : `Round completed: ${roundScore}/6 correct.`) +
+        `<br><strong>Ready for Round ${nextRound}?</strong>`;
+      next.textContent = `Go to Round ${nextRound}`;
+      next.disabled = false;
+      next.style.opacity = '1';
     } else {
-      moonFeedback.innerHTML = `Round completed: ${roundScore}/6 correct.`;
-    }
-    if(r < 2){
-      moonNext.textContent = 'Next Round';
-    } else {
-      const title = totalPoints===3?'Moon Master 🌟':totalPoints===2?'Moon Explorer 🚀':totalPoints===1?'Moon Detective 🔎':'Keep Exploring 🌙';
-      moonFeedback.innerHTML += `<br><strong>Final result: ${totalPoints}/3 – ${title}</strong>`;
-      moonNext.textContent = 'Play Again';
+      state = 'finished';
+      const title = totalPoints===3 ? 'Moon Master 🌟'
+        : totalPoints===2 ? 'Moon Explorer 🚀'
+        : totalPoints===1 ? 'Moon Detective 🔎'
+        : 'Keep Exploring 🌙';
+      feedback.innerHTML = (roundScore === 6
+        ? 'Perfect round! ⭐ You earned 1 point.'
+        : `Round completed: ${roundScore}/6 correct.`) +
+        `<br><strong>Final result: ${totalPoints}/3 – ${title}</strong>`;
+      next.textContent = 'Play Again';
+      next.disabled = false;
+      next.style.opacity = '1';
     }
   }
 
-  document.querySelectorAll('[data-color]').forEach(button => button.addEventListener('click', () => {
-    if(!started || answered) return;
-    const current = moonRounds[r].questions[q];
-    const chosen = button.dataset.color;
-    if(chosen === current.color){
-      roundScore++;
-      moonFeedback.textContent = `Correct! ${colorLabel[chosen]} is the right brick. 🌙`;
-    } else {
-      moonFeedback.textContent = `Not this time. Correct brick: ${colorLabel[current.color]}.`;
-    }
-    answered = true;
-  }));
+  document.querySelectorAll('[data-color]').forEach(button => {
+    button.addEventListener('click', () => {
+      if(!started || state !== 'question' || answered) return;
 
-  moonNext.addEventListener('click', () => {
-    if(!started){
-      started = true; r=0; q=0; roundScore=0; totalPoints=0; renderMoon(); return;
+      const current = moonRounds[roundIndex].questions[questionIndex];
+      const chosen = button.dataset.color;
+
+      if(chosen === current.color){
+        roundScore++;
+        feedback.textContent = `Correct! ${colorLabel[chosen]} is the right brick. 🌙`;
+      } else {
+        feedback.textContent = `Not this time. Correct brick: ${colorLabel[current.color]}.`;
+      }
+
+      answered = true;
+
+      // On question 6, end the round immediately so there is no "stuck" extra step.
+      if(questionIndex === 5){
+        setTimeout(endRound, 250);
+      } else {
+        next.disabled = false;
+        next.style.opacity = '1';
+      }
+    });
+  });
+
+  next.addEventListener('click', () => {
+    if(state === 'ready'){
+      started = true;
+      roundIndex = 0;
+      questionIndex = 0;
+      roundScore = 0;
+      totalPoints = 0;
+      renderQuestion();
+      return;
     }
-    if(moonNext.textContent === 'Next Round'){
-      r++; q=0; roundScore=0; renderMoon(); return;
+
+    if(state === 'betweenRounds'){
+      roundIndex++;
+      questionIndex = 0;
+      roundScore = 0;
+      renderQuestion();
+      return;
     }
-    if(moonNext.textContent === 'Play Again'){
-      r=0; q=0; roundScore=0; totalPoints=0; renderMoon(); return;
+
+    if(state === 'finished'){
+      roundIndex = 0;
+      questionIndex = 0;
+      roundScore = 0;
+      totalPoints = 0;
+      started = true;
+      renderQuestion();
+      return;
     }
-    if(!answered){
-      moonFeedback.textContent = 'Please choose a brick colour first.'; return;
-    }
-    if(q < 5){
-      q++; renderMoon();
-    } else {
-      finishRound();
+
+    if(state === 'question'){
+      if(!answered) return;
+      if(questionIndex < 5){
+        questionIndex++;
+        renderQuestion();
+      }
     }
   });
 
+  // SAFE INTERNET
   const safeItems = [
     {s:'A stranger asks you to send your photo.',a:'blue'},
     {s:'A shocking news item has no clear source.',a:'yellow'},
@@ -154,24 +219,29 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.querySelectorAll('[data-safe]').forEach(b => b.addEventListener('click', () => {
     if(!curSafe) return;
-    byId('safeFeedback').textContent = b.dataset.safe === curSafe.a ? 'Good choice! ✅' : 'Think again.';
+    byId('safeFeedback').textContent =
+      b.dataset.safe === curSafe.a ? 'Good choice! ✅' : 'Think again.';
   }));
 
+  // TEAM SPACE
   const colors = ['Red','Orange','Yellow','Green','Blue','Dark Blue'];
   document.querySelectorAll('[data-team]').forEach(b => b.addEventListener('click', () => {
     const team = b.dataset.team;
     byId('teamEditor').classList.remove('hidden');
     byId('teamTitle').textContent = 'Team ' + team;
-    byId('factFields').innerHTML = colors.map((c,i)=>`<div class="fact-row"><strong>${c}</strong><input id="fact${i}" placeholder="Write a short scientific fact"></div>`).join('');
+    byId('factFields').innerHTML = colors.map((c,i) =>
+      `<div class="fact-row"><strong>${c}</strong><input id="fact${i}" placeholder="Write a short scientific fact"></div>`
+    ).join('');
     byId('saveTeam').dataset.team = team;
   }));
   byId('saveTeam').addEventListener('click', e => {
     const team = e.target.dataset.team;
-    const facts = colors.map((_,i)=>byId('fact'+i)?.value || '');
+    const facts = colors.map((_,i) => byId('fact'+i)?.value || '');
     localStorage.setItem('team-'+team, JSON.stringify(facts));
     byId('saveMsg').textContent = 'Saved on this device.';
   });
 
+  // TIMER
   let timerInt = null;
   byId('timerBtn').addEventListener('click', () => {
     clearInterval(timerInt);
