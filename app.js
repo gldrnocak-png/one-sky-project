@@ -372,25 +372,156 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // SAFE INTERNET
-  const safeItems = [
-    {s:'A stranger asks you to send your photo.',a:'blue'},
-    {s:'A shocking news item has no clear source.',a:'yellow'},
-    {s:'A website asks for your home address.',a:'blue'},
-    {s:'A classmate shares another student’s photo without permission.',a:'orange'},
-    {s:'A pop-up says “You won a prize! Click now!”',a:'red'},
-    {s:'An online message scares you.',a:'darkblue'}
+  const safeScenarios = [
+    {
+      text:'A stranger asks you to send a photo of yourself.',
+      answer:'blue',
+      explanation:'Protect your personal information. Do not send personal photos to strangers.'
+    },
+    {
+      text:'You see shocking news online and someone asks you to share it immediately, but the source is unclear.',
+      answer:'yellow',
+      explanation:'Check the source and information before sharing.'
+    },
+    {
+      text:'A website asks for your full name, home address and phone number.',
+      answer:'blue',
+      explanation:'Personal information should be protected and not shared carelessly.'
+    },
+    {
+      text:'A classmate shares another student’s funny photo without permission.',
+      answer:'orange',
+      explanation:'Be kind and respectful. Ask permission before sharing someone else’s photo.'
+    },
+    {
+      text:'A pop-up says, “You won a prize! Click now!”',
+      answer:'red',
+      explanation:'Stop before clicking suspicious pop-ups or links.'
+    },
+    {
+      text:'A friend asks you to give them your password.',
+      answer:'blue',
+      explanation:'Passwords are private and should not be shared.'
+    },
+    {
+      text:'A student mocks or insults another student in an online group.',
+      answer:'orange',
+      explanation:'Online communication should be kind and respectful.'
+    },
+    {
+      text:'You find information for your homework, but you cannot tell who created the website.',
+      answer:'yellow',
+      explanation:'Check the source and verify the information before using it.'
+    },
+    {
+      text:'A stranger offers you free game points if you tell them the name of your school.',
+      answer:'blue',
+      explanation:'School information can be personal information. Do not share it with strangers.'
+    },
+    {
+      text:'You receive a scary message online and you are not sure what to do.',
+      answer:'darkblue',
+      explanation:'Ask a trusted adult for help when something online makes you worried or unsure.'
+    }
   ];
-  let curSafe = null;
-  byId('safeNext').addEventListener('click', () => {
-    curSafe = safeItems[Math.floor(Math.random()*safeItems.length)];
-    byId('safeScenario').textContent = curSafe.s;
-    byId('safeFeedback').textContent = '';
+
+  let safeIndex = -1;
+  let safeScore = 0;
+  let safeStarted = false;
+  let safeAnswered = false;
+
+  const safeScenario = byId('safeScenario');
+  const safeFeedback = byId('safeFeedback');
+  const safeNext = byId('safeNext');
+  const safeProgress = byId('safeProgress');
+  const safeScoreEl = byId('safeScore');
+  const safeTotalEl = byId('safeTotal');
+
+  if(safeTotalEl) safeTotalEl.textContent = safeScenarios.length;
+
+  const safeBrickName = {
+    red:'STOP',
+    yellow:'THINK',
+    green:'SAFE',
+    blue:'PRIVACY',
+    orange:'KIND',
+    darkblue:'ASK'
+  };
+
+  function showSafeScenario(){
+    safeAnswered = false;
+    const item = safeScenarios[safeIndex];
+    safeProgress.textContent = `Scenario ${safeIndex + 1} of ${safeScenarios.length}`;
+    safeScenario.textContent = item.text;
+    safeFeedback.textContent = '';
+    safeNext.textContent = 'Next Scenario';
+    safeNext.disabled = true;
+    safeNext.style.opacity = '.55';
+  }
+
+  function finishSafeGame(){
+    safeStarted = false;
+    safeAnswered = true;
+    safeProgress.textContent = 'Challenge Complete!';
+
+    let result = '';
+    if(safeScore === 10) result = 'Digital Safety Master 🛡️';
+    else if(safeScore >= 8) result = 'Safe Internet Explorer 🌐';
+    else if(safeScore >= 6) result = 'Digital Detective 🔎';
+    else result = 'Keep Practising 💡';
+
+    safeScenario.innerHTML = `You scored <strong>${safeScore}/${safeScenarios.length}</strong><br>${result}`;
+    safeFeedback.textContent = 'Great job! You completed all 10 online safety scenarios.';
+    safeNext.textContent = 'Play Again';
+    safeNext.disabled = false;
+    safeNext.style.opacity = '1';
+    playTone('finish');
+  }
+
+  safeNext.addEventListener('click', () => {
+    if(!safeStarted){
+      safeStarted = true;
+      safeIndex = 0;
+      safeScore = 0;
+      safeScoreEl.textContent = '0';
+      showSafeScenario();
+      return;
+    }
+
+    if(safeIndex < safeScenarios.length - 1){
+      safeIndex++;
+      showSafeScenario();
+    }else{
+      finishSafeGame();
+    }
   });
-  document.querySelectorAll('[data-safe]').forEach(b => b.addEventListener('click', () => {
-    if(!curSafe) return;
-    byId('safeFeedback').textContent =
-      b.dataset.safe === curSafe.a ? 'Good choice! ✅' : 'Think again.';
-  }));
+
+  document.querySelectorAll('[data-safe]').forEach(button => {
+    button.addEventListener('click', () => {
+      if(!safeStarted || safeAnswered) return;
+
+      const item = safeScenarios[safeIndex];
+      const chosen = button.dataset.safe;
+
+      if(chosen === item.answer){
+        safeScore++;
+        safeScoreEl.textContent = safeScore;
+        safeFeedback.innerHTML = `Correct! ✅ <strong>${safeBrickName[item.answer]}</strong><br>${item.explanation}`;
+        playTone('correct');
+      }else{
+        safeFeedback.innerHTML = `Not this time. The best brick is <strong>${safeBrickName[item.answer]}</strong>.<br>${item.explanation}`;
+        playTone('wrong');
+      }
+
+      safeAnswered = true;
+      safeNext.disabled = false;
+      safeNext.style.opacity = '1';
+
+      if(safeIndex === safeScenarios.length - 1){
+        safeNext.textContent = 'See Result';
+      }
+    });
+  });
 
   // TEAM SPACE
   const colors = ['Red','Orange','Yellow','Green','Blue','Dark Blue'];

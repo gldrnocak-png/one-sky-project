@@ -87,8 +87,21 @@
     <section id="safe" class="view">
       <div class="card">
         <h2>🛡️ Six Bricks Safe Internet Challenge</h2>
-        <p id="safeScenario">Press “New Scenario” to begin.</p>
-        <div class="brick-buttons">
+        <p class="game-note"><strong>Choose the best brick:</strong> STOP • THINK • SAFE • PRIVACY • KIND • ASK</p>
+
+        <div id="safeLegend" class="safe-legend">
+          <span><b>🔴 Red – STOP:</b> Stop and think.</span>
+          <span><b>🟡 Yellow – THINK:</b> Check information and sources.</span>
+          <span><b>🟢 Green – SAFE:</b> Choose safe behaviour.</span>
+          <span><b>🔵 Blue – PRIVACY:</b> Protect personal information.</span>
+          <span><b>🟠 Orange – KIND:</b> Be kind and respectful online.</span>
+          <span><b>🔷 Dark Blue – ASK:</b> Ask a trusted adult if unsure.</span>
+        </div>
+
+        <div id="safeProgress" class="game-progress">Press “Start Challenge” to begin.</div>
+        <div id="safeScenario" class="question-box">Ready for a safer internet?</div>
+
+        <div class="brick-buttons safe-buttons">
           <button class="red" data-safe="red">STOP</button>
           <button class="yellow" data-safe="yellow">THINK</button>
           <button class="green" data-safe="green">SAFE</button>
@@ -96,8 +109,13 @@
           <button class="orange" data-safe="orange">KIND</button>
           <button class="darkblue" data-safe="darkblue">ASK</button>
         </div>
-        <button id="safeNext">New Scenario</button>
-        <p id="safeFeedback" class="feedback"></p>
+
+        <p id="safeFeedback" class="feedback safe-feedback"></p>
+        <button id="safeNext" class="primary game-next">Start Challenge</button>
+
+        <div class="score-panel">
+          Score: <strong id="safeScore">0</strong> / <strong id="safeTotal">10</strong>
+        </div>
       </div>
     </section>
 
@@ -146,6 +164,6 @@
   </main>
 
   <footer>One Sky, Play, Learn & Discover • eTwinning • Learning through play</footer>
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

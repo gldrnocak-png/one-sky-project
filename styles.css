@@ -78,3 +78,26 @@ footer{text-align:center;padding:24px;color:#567}@media(max-width:600px){.hero{p
   padding:12px;
   font-size:1.05rem;
 }
+
+.safe-legend{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:8px;
+  margin:14px 0 18px;
+  padding:14px;
+  background:#f7fbff;
+  border:1px solid #d8ebf8;
+  border-radius:14px;
+  font-size:.94rem;
+  line-height:1.45;
+}
+.safe-buttons{
+  justify-content:center;
+}
+.safe-buttons button{
+  min-width:105px;
+}
+.safe-feedback{
+  text-align:center;
+  font-size:1.05rem;
+}
