@@ -152,24 +152,77 @@
       </div>
     </section>
 
-    <section id="team" class="view">
-      <div class="card">
-        <h2>🤝 Colour the Sky with Six Bricks</h2>
-        <p>Choose a team and write one scientific fact for each colour.</p>
-        <div class="team-grid">
-          <button class="team-card" data-team="Sun">☀️ Team Sun</button>
-          <button class="team-card" data-team="Moon">🌙 Team Moon</button>
-          <button class="team-card" data-team="Earth">🌍 Team Earth</button>
-          <button class="team-card" data-team="Orbit">🪐 Team Orbit</button>
-        </div>
-        <div id="teamEditor" class="team-editor hidden">
-          <h3 id="teamTitle"></h3>
-          <div id="factFields"></div>
-          <button id="saveTeam">Save on this device</button>
-          <p id="saveMsg" class="feedback"></p>
-        </div>
+   <section id="team" class="view">
+  <div class="card">
+    <h2>🌍 Team Space – Colour the Sky with Six Bricks</h2>
+    <p>
+      Welcome to Team Space! Choose your team, select a brick colour, and add a short idea,
+      fact, or message about the sky, science, friendship, or our project.
+    </p>
+
+    <div class="team-form">
+      <label for="teamSelect">Choose Your Team</label>
+      <select id="teamSelect">
+        <option value="">Select a team</option>
+        <option value="Sun">Team Sun</option>
+        <option value="Moon">Team Moon</option>
+        <option value="Earth">Team Earth</option>
+        <option value="Orbit">Team Orbit</option>
+      </select>
+
+      <label for="studentName">Your Name</label>
+      <input type="text" id="studentName" placeholder="Enter your name">
+
+      <label for="studentSchool">Your School</label>
+      <input type="text" id="studentSchool" placeholder="Enter your school">
+
+      <label for="studentCountry">Your Country</label>
+      <input type="text" id="studentCountry" placeholder="Enter your country">
+
+      <label>Choose a Brick Colour</label>
+      <div class="brick-choices" id="brickChoices">
+        <button type="button" class="brick-btn red" data-colour="Red">Red</button>
+        <button type="button" class="brick-btn orange" data-colour="Orange">Orange</button>
+        <button type="button" class="brick-btn yellow" data-colour="Yellow">Yellow</button>
+        <button type="button" class="brick-btn green" data-colour="Green">Green</button>
+        <button type="button" class="brick-btn blue" data-colour="Blue">Blue</button>
+        <button type="button" class="brick-btn darkblue" data-colour="Dark Blue">Dark Blue</button>
       </div>
-    </section>
+
+      <p id="selectedColourText" class="selected-colour">Selected colour: None</p>
+
+      <label for="teamMessage">Your Idea / Fact / Message</label>
+      <textarea id="teamMessage" rows="4" placeholder="Write a short idea, fact or message..."></textarea>
+
+      <div class="team-actions">
+        <button id="addToBoardBtn" class="primary-btn">Add to Team Board</button>
+        <button id="clearBoardBtn" class="secondary-btn" type="button">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-boards">
+    <div class="team-board">
+      <h3>☀️ Team Sun Board</h3>
+      <div id="boardSun" class="board-list"></div>
+    </div>
+
+    <div class="team-board">
+      <h3>🌙 Team Moon Board</h3>
+      <div id="boardMoon" class="board-list"></div>
+    </div>
+
+    <div class="team-board">
+      <h3>🌍 Team Earth Board</h3>
+      <div id="boardEarth" class="board-list"></div>
+    </div>
+
+    <div class="team-board">
+      <h3>🪐 Team Orbit Board</h3>
+      <div id="boardOrbit" class="board-list"></div>
+    </div>
+  </div>
+</section>
 
     <section id="final" class="view">
       <div class="card">
