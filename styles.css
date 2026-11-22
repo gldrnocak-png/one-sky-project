@@ -293,3 +293,129 @@ footer{text-align:center;padding:24px;color:#567}@media(max-width:600px){.hero{p
   .round-line{min-width:8px}
   .moon-brick-btn{min-width:96px;padding:11px 10px}
 }
+.team-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.team-form input,
+.team-form select,
+.team-form textarea {
+  padding: 10px;
+  border: 1px solid #cfd8e3;
+  border-radius: 10px;
+  font-size: 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.brick-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.brick-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.brick-btn.active {
+  outline: 3px solid #222;
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.brick-btn.red { background: #e74c3c; }
+.brick-btn.orange { background: #f39c12; }
+.brick-btn.yellow { background: #f1c40f; color: #333; }
+.brick-btn.green { background: #2ecc71; }
+.brick-btn.blue { background: #5dade2; }
+.brick-btn.darkblue { background: #1f4fa3; }
+
+.selected-colour {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.team-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.primary-btn {
+  background: #1f78ff;
+  color: white;
+}
+
+.secondary-btn {
+  background: #e6ecf5;
+  color: #333;
+}
+
+.team-boards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.team-board {
+  background: #f8fbff;
+  border: 1px solid #d9e7f5;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.team-board h3 {
+  margin-top: 0;
+  color: #1f4fa3;
+}
+
+.board-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.entry-card {
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  border-left: 8px solid #ccc;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.entry-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.entry-meta {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.entry-message {
+  font-size: 14px;
+  line-height: 1.4;
+}
