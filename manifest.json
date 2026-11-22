@@ -1,6 +1,7 @@
 {
   "name": "One Sky, Play, Learn & Discover",
   "short_name": "One Sky",
+  "id": "./",
   "description": "Interactive eTwinning science and Six Bricks learning activities.",
   "start_url": "./",
   "scope": "./",
