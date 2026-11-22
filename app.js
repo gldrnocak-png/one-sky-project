@@ -557,3 +557,115 @@ document.addEventListener('DOMContentLoaded', () => {
     },1000);
   });
 });
+let selectedBrickColour = "";
+
+const colourMap = {
+  "Red": "#e74c3c",
+  "Orange": "#f39c12",
+  "Yellow": "#f1c40f",
+  "Green": "#2ecc71",
+  "Blue": "#5dade2",
+  "Dark Blue": "#1f4fa3"
+};
+
+const brickButtons = document.querySelectorAll(".brick-btn");
+const selectedColourText = document.getElementById("selectedColourText");
+const addToBoardBtn = document.getElementById("addToBoardBtn");
+const clearBoardBtn = document.getElementById("clearBoardBtn");
+
+brickButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    brickButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedBrickColour = btn.dataset.colour;
+    selectedColourText.textContent = "Selected colour: " + selectedBrickColour;
+  });
+});
+
+function getTeamEntries() {
+  return JSON.parse(localStorage.getItem("teamSpaceEntries")) || [];
+}
+
+function saveTeamEntries(entries) {
+  localStorage.setItem("teamSpaceEntries", JSON.stringify(entries));
+}
+
+function renderBoards() {
+  const entries = getTeamEntries();
+
+  const boardSun = document.getElementById("boardSun");
+  const boardMoon = document.getElementById("boardMoon");
+  const boardEarth = document.getElementById("boardEarth");
+  const boardOrbit = document.getElementById("boardOrbit");
+
+  boardSun.innerHTML = "";
+  boardMoon.innerHTML = "";
+  boardEarth.innerHTML = "";
+  boardOrbit.innerHTML = "";
+
+  entries.forEach(entry => {
+    const card = document.createElement("div");
+    card.className = "entry-card";
+    card.style.borderLeftColor = colourMap[entry.colour] || "#ccc";
+
+    card.innerHTML = `
+      <div class="entry-name">${entry.name}</div>
+      <div class="entry-meta">${entry.school} • ${entry.country} • ${entry.colour}</div>
+      <div class="entry-message">${entry.message}</div>
+    `;
+
+    if (entry.team === "Sun") boardSun.appendChild(card);
+    if (entry.team === "Moon") boardMoon.appendChild(card);
+    if (entry.team === "Earth") boardEarth.appendChild(card);
+    if (entry.team === "Orbit") boardOrbit.appendChild(card);
+  });
+}
+
+if (addToBoardBtn) {
+  addToBoardBtn.addEventListener("click", () => {
+    const team = document.getElementById("teamSelect").value;
+    const name = document.getElementById("studentName").value.trim();
+    const school = document.getElementById("studentSchool").value.trim();
+    const country = document.getElementById("studentCountry").value.trim();
+    const message = document.getElementById("teamMessage").value.trim();
+
+    if (!team || !name || !school || !country || !selectedBrickColour || !message) {
+      alert("Please fill in all fields and choose a brick colour.");
+      return;
+    }
+
+    const entries = getTeamEntries();
+    entries.push({
+      team,
+      name,
+      school,
+      country,
+      colour: selectedBrickColour,
+      message
+    });
+
+    saveTeamEntries(entries);
+    renderBoards();
+
+    document.getElementById("teamSelect").value = "";
+    document.getElementById("studentName").value = "";
+    document.getElementById("studentSchool").value = "";
+    document.getElementById("studentCountry").value = "";
+    document.getElementById("teamMessage").value = "";
+    selectedBrickColour = "";
+    selectedColourText.textContent = "Selected colour: None";
+    brickButtons.forEach(b => b.classList.remove("active"));
+  });
+}
+
+if (clearBoardBtn) {
+  clearBoardBtn.addEventListener("click", () => {
+    const confirmDelete = confirm("Are you sure you want to clear all team board entries?");
+    if (confirmDelete) {
+      localStorage.removeItem("teamSpaceEntries");
+      renderBoards();
+    }
+  });
+}
+
+renderBoards();
