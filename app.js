@@ -524,23 +524,141 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // TEAM SPACE
-  const colors = ['Red','Orange','Yellow','Green','Blue','Dark Blue'];
-  document.querySelectorAll('[data-team]').forEach(b => b.addEventListener('click', () => {
-    const team = b.dataset.team;
-    byId('teamEditor').classList.remove('hidden');
-    byId('teamTitle').textContent = 'Team ' + team;
-    byId('factFields').innerHTML = colors.map((c,i) =>
-      `<div class="fact-row"><strong>${c}</strong><input id="fact${i}" placeholder="Write a short scientific fact"></div>`
-    ).join('');
-    byId('saveTeam').dataset.team = team;
-  }));
-  byId('saveTeam').addEventListener('click', e => {
-    const team = e.target.dataset.team;
-    const facts = colors.map((_,i) => byId('fact'+i)?.value || '');
-    localStorage.setItem('team-'+team, JSON.stringify(facts));
-    byId('saveMsg').textContent = 'Saved on this device.';
-  });
+ const TEAM_SPACE_API = "https://script.google.com/macros/s/AKfycbwxvjm86uWf5-uW-AKuXxo_PvHMI0Bd5_677fgCOf9nWutqfcwdyVoTYF_3qrBlSXhK/exec";
 
+let selectedBrickColour = "";
+
+const colourMap = {
+  "Red": "#e74c3c",
+  "Orange": "#f39c12",
+  "Yellow": "#f1c40f",
+  "Green": "#2ecc71",
+  "Blue": "#5dade2",
+  "Dark Blue": "#1f4fa3"
+};
+
+const brickButtons = document.querySelectorAll(".brick-btn");
+const selectedColourText = document.getElementById("selectedColourText");
+const addToBoardBtn = document.getElementById("addToBoardBtn");
+const clearBoardBtn = document.getElementById("clearBoardBtn");
+
+brickButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    brickButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedBrickColour = btn.dataset.colour;
+    selectedColourText.textContent =
+      "Selected colour: " + selectedBrickColour;
+  });
+});
+
+async function loadTeamEntries() {
+  try {
+    const response = await fetch(TEAM_SPACE_API);
+    const entries = await response.json();
+    renderBoards(entries);
+  } catch (error) {
+    console.error("Could not load Team Space entries:", error);
+  }
+}
+
+function renderBoards(entries) {
+  const boardSun = document.getElementById("boardSun");
+  const boardMoon = document.getElementById("boardMoon");
+  const boardEarth = document.getElementById("boardEarth");
+  const boardOrbit = document.getElementById("boardOrbit");
+
+  boardSun.innerHTML = "";
+  boardMoon.innerHTML = "";
+  boardEarth.innerHTML = "";
+  boardOrbit.innerHTML = "";
+
+  entries.forEach(entry => {
+    const card = document.createElement("div");
+    card.className = "entry-card";
+    card.style.borderLeftColor =
+      colourMap[entry.colour] || "#ccc";
+
+    card.innerHTML = `
+      <div class="entry-name">${entry.name}</div>
+      <div class="entry-meta">
+        ${entry.school} • ${entry.country} • ${entry.colour}
+      </div>
+      <div class="entry-message">${entry.message}</div>
+    `;
+
+    if (entry.team === "Sun") boardSun.appendChild(card);
+    if (entry.team === "Moon") boardMoon.appendChild(card);
+    if (entry.team === "Earth") boardEarth.appendChild(card);
+    if (entry.team === "Orbit") boardOrbit.appendChild(card);
+  });
+}
+
+if (addToBoardBtn) {
+  addToBoardBtn.addEventListener("click", async () => {
+    const team = document.getElementById("teamSelect").value;
+    const name = document.getElementById("studentName").value.trim();
+    const school = document.getElementById("studentSchool").value.trim();
+    const country = document.getElementById("studentCountry").value.trim();
+    const message = document.getElementById("teamMessage").value.trim();
+
+    if (
+      !team ||
+      !name ||
+      !school ||
+      !country ||
+      !selectedBrickColour ||
+      !message
+    ) {
+      alert("Please fill in all fields and choose a brick colour.");
+      return;
+    }
+
+    addToBoardBtn.disabled = true;
+    addToBoardBtn.textContent = "Saving...";
+
+    const formData = new URLSearchParams();
+    formData.append("team", team);
+    formData.append("name", name);
+    formData.append("school", school);
+    formData.append("country", country);
+    formData.append("colour", selectedBrickColour);
+    formData.append("message", message);
+
+    try {
+      await fetch(TEAM_SPACE_API, {
+        method: "POST",
+        body: formData
+      });
+
+      document.getElementById("teamSelect").value = "";
+      document.getElementById("studentName").value = "";
+      document.getElementById("studentSchool").value = "";
+      document.getElementById("studentCountry").value = "";
+      document.getElementById("teamMessage").value = "";
+
+      selectedBrickColour = "";
+      selectedColourText.textContent = "Selected colour: None";
+      brickButtons.forEach(b => b.classList.remove("active"));
+
+      await loadTeamEntries();
+
+      alert("Your contribution has been added to the Team Board! 🌍🧱");
+    } catch (error) {
+      alert("The contribution could not be saved. Please try again.");
+      console.error(error);
+    }
+
+    addToBoardBtn.disabled = false;
+    addToBoardBtn.textContent = "Add to Team Board";
+  });
+}
+
+if (clearBoardBtn) {
+  clearBoardBtn.style.display = "none";
+}
+
+loadTeamEntries();
   // TIMER
   let timerInt = null;
   byId('timerBtn').addEventListener('click', () => {
