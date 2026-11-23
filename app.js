@@ -525,7 +525,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // TEAM SPACE
  const TEAM_SPACE_API = "https://script.google.com/macros/s/AKfycbwxvjm86uWf5-uW-AKuXxo_PvHMI0Bd5_677fgCOf9nWutqfcwdyVoTYF_3qrBlSXhK/exec";
-
 let selectedBrickColour = "";
 
 const colourMap = {
